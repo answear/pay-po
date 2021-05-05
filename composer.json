@@ -1,0 +1,48 @@
+{
+  "name": "answear/pay-po",
+  "description": "PayPo PHP library.",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*",
+    "marc-mabe/php-enum": "^4.3",
+    "php-http/guzzle6-adapter": "^1.1",
+    "symfony/serializer": "^4.4"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpunit/phpunit": "^8.0",
+    "symfony/phpunit-bridge": "^5.0",
+    "phpro/grumphp": "^v1.3",
+    "friendsofphp/php-cs-fixer": "^2.18",
+    "phpstan/phpstan": "^0.12.82",
+    "phpstan/phpstan-webmozart-assert": "^0.12.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "Answear\\PayPo\\": "src/PayPo/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Answear\\PayPo\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "GrumPHP\\Composer\\DevelopmentIntegrator::integrate"
+    ],
+    "post-update-cmd": [
+      "GrumPHP\\Composer\\DevelopmentIntegrator::integrate"
+    ]
+  },
+  "extra": {
+    "grumphp": {
+      "config-default-path": "grumphp.yaml"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
