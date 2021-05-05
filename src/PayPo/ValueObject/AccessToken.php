@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\PayPo\ValueObject;
 
+//test
 class AccessToken
 {
     private static ?\DateTimeImmutable $expiresIn;
