@@ -7,8 +7,8 @@
     "php": ">=7.4",
     "ext-json": "*",
     "marc-mabe/php-enum": "^4.3",
-    "php-http/guzzle6-adapter": "^1.1",
-    "symfony/serializer": "^4.4"
+    "guzzlehttp/guzzle": "^6.0 || ^7.0",
+    "symfony/serializer": "^4.4 || ^5.3"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
