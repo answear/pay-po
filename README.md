@@ -1,6 +1,6 @@
 # PayPo PHP library
 
-Documentation of the API can be found here: https://paypo.pl/home/integracja.
+Documentation of the API can be found here: [https://paypo.pl/home/integracja](https://paypo.pl/biznes/integracja).
 
 
 Installation
