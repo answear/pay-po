@@ -7,6 +7,7 @@ namespace Answear\PayPo\Service;
 use Answear\PayPo\Exception\BadResponseException;
 use Answear\PayPo\Exception\PrepareRequestException;
 use Answear\PayPo\Exception\ServiceUnavailable;
+use Answear\PayPo\Request\Transaction\CancelRequest;
 use Answear\PayPo\Request\Transaction\ConfirmRequest;
 use Answear\PayPo\Request\Transaction\CreateRequest;
 use Answear\PayPo\Request\Transaction\RefundRequest;
@@ -85,6 +86,18 @@ class Order
     public function refund(string $transactionUuid, int $amount): Response
     {
         $request = new RefundRequest($transactionUuid, $amount);
+
+        return $this->handleRequest($request, Response::class);
+    }
+
+    /**
+     * @throws ServiceUnavailable
+     * @throws PrepareRequestException
+     * @throws BadResponseException
+     */
+    public function cancel(string $transactionUuid): Response
+    {
+        $request = new CancelRequest($transactionUuid);
 
         return $this->handleRequest($request, Response::class);
     }

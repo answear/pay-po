@@ -6,9 +6,10 @@
     "require": {
         "php": ">=7.4|^8.0",
         "ext-json": "*",
-        "marc-mabe/php-enum": "^4.3",
         "guzzlehttp/guzzle": "^6.0|^7.0",
-        "symfony/serializer": "^5.4|^6.0"
+        "marc-mabe/php-enum": "^4.3",
+        "symfony/property-access": "^5.4|<=6.4",
+        "symfony/serializer": "^5.4|^6.0 <=6.2"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
