@@ -11,7 +11,6 @@ use Answear\PayPo\Request\Transaction\CancelRequest;
 use Answear\PayPo\Request\Transaction\ConfirmRequest;
 use Answear\PayPo\Request\Transaction\CreateRequest;
 use Answear\PayPo\Request\Transaction\RefundRequest;
-use Answear\PayPo\Request\Transaction\RejectRequest;
 use Answear\PayPo\Request\Transaction\RequestInterface;
 use Answear\PayPo\Request\Transaction\StatusDetailsRequest;
 use Answear\PayPo\Response\Order\ConfirmResponse;
@@ -50,18 +49,6 @@ class Order
     public function confirm(string $transactionUuid): ConfirmResponse
     {
         $request = new ConfirmRequest($transactionUuid);
-
-        return $this->handleRequest($request, ConfirmResponse::class);
-    }
-
-    /**
-     * @throws ServiceUnavailable
-     * @throws PrepareRequestException
-     * @throws BadResponseException
-     */
-    public function reject(string $transactionUuid): ConfirmResponse
-    {
-        $request = new RejectRequest($transactionUuid);
 
         return $this->handleRequest($request, ConfirmResponse::class);
     }
