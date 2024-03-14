@@ -32,7 +32,6 @@ $redirectUrl = $registerResponse->redirectUrl;
 //others requests
 $orderService->confirm('transaction-uuid');
 $orderService->refund('transaction-uuid', 123);
-$orderService->reject('transaction-uuid');
 $orderService->getStatusDetails('transaction-uuid');
 $orderService->cancel('transaction-uuid');
 ```
