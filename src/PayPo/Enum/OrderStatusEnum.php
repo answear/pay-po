@@ -44,4 +44,9 @@ class OrderStatusEnum extends Enum
     {
         return static::get(static::CANCELED);
     }
+
+    public function isFinal(): bool
+    {
+        return $this->is(self::completed()) || $this->is(self::rejected()) || $this->is(self::canceled());
+    }
 }
