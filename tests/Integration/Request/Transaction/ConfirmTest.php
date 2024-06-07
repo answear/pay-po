@@ -14,6 +14,7 @@ class ConfirmTest extends AbstractOrderTest
 
     /**
      * @test
+     *
      * @dataProvider provideDataForRequest
      */
     public function configurationNotSetException(string $transactionUuid): void

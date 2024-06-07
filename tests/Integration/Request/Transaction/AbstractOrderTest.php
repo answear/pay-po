@@ -21,6 +21,7 @@ abstract class AbstractOrderTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider provideDataForRequest
      */
     public function successfullySend($request, string $expectedRequest, array $apiResponse): void

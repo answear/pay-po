@@ -15,9 +15,9 @@
         "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^9.5",
         "symfony/phpunit-bridge": "6.4.*",
-        "phpro/grumphp": "^v1.5",
-        "friendsofphp/php-cs-fixer": "^3.4",
-        "phpstan/phpstan": "^1.4",
+        "phpro/grumphp": "^v2.5",
+        "friendsofphp/php-cs-fixer": "^3.58",
+        "phpstan/phpstan": "^1.11",
         "phpstan/phpstan-webmozart-assert": "^1.0"
     },
     "autoload": {
