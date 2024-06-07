@@ -8,13 +8,13 @@
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "marc-mabe/php-enum": "^4.3",
-        "symfony/property-access": "^5.4|<=6.4",
-        "symfony/serializer": "^5.4|^6.0 <=6.2"
+        "symfony/property-access": "^5.4|^6.4",
+        "symfony/serializer": "^5.4|^6.4"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^9.5",
-        "symfony/phpunit-bridge": "6.1.*",
+        "symfony/phpunit-bridge": "6.4.*",
         "phpro/grumphp": "^v1.5",
         "friendsofphp/php-cs-fixer": "^3.4",
         "phpstan/phpstan": "^1.4",
