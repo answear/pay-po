@@ -8,8 +8,8 @@
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "marc-mabe/php-enum": "^4.3",
-        "symfony/property-access": "^5.4|^6.4",
-        "symfony/serializer": "^5.4|^6.4"
+        "symfony/property-access": "6.4.*",
+        "symfony/serializer": "6.4.*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
