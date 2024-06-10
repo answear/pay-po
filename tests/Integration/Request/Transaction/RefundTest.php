@@ -15,6 +15,7 @@ class RefundTest extends AbstractOrderTest
 
     /**
      * @test
+     *
      * @dataProvider provideDataForRequest
      */
     public function configurationNotSetException($request): void

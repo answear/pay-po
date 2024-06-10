@@ -27,7 +27,7 @@ class PayPoClient
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function send(RequestInterface $request, ?string $body): ResponseInterface
     {
@@ -49,7 +49,7 @@ class PayPoClient
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     private function sendData(RequestInterface $request, ?string $body): ResponseInterface
     {

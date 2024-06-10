@@ -4,20 +4,20 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": ">=7.4|^8.0",
+        "php": "^8.1",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "marc-mabe/php-enum": "^4.3",
-        "symfony/property-access": "^5.4|<=6.4",
-        "symfony/serializer": "^5.4|^6.0 <=6.2"
+        "symfony/property-access": "6.4.*",
+        "symfony/serializer": "6.4.*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^9.5",
-        "symfony/phpunit-bridge": "6.1.*",
-        "phpro/grumphp": "^v1.5",
-        "friendsofphp/php-cs-fixer": "^3.4",
-        "phpstan/phpstan": "^1.4",
+        "symfony/phpunit-bridge": "6.4.*",
+        "phpro/grumphp": "^v2.5",
+        "friendsofphp/php-cs-fixer": "^3.58",
+        "phpstan/phpstan": "^1.11",
         "phpstan/phpstan-webmozart-assert": "^1.0"
     },
     "autoload": {

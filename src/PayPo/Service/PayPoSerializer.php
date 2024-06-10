@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Answear\PayPo\Service;
 
-use Answear\PayPo\Service\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -39,7 +38,11 @@ class PayPoSerializer
             $encoders = [new JsonEncoder()];
 
             $normalizers = [
-                new PropertyNormalizer(),
+                new Normalizer\PropertyNormalizer(
+                    defaultContext: [
+                        Normalizer\PropertyNormalizer::NORMALIZE_VISIBILITY => Normalizer\PropertyNormalizer::NORMALIZE_PUBLIC | Normalizer\PropertyNormalizer::NORMALIZE_PROTECTED,
+                    ]
+                ),
                 new Normalizer\DateTimeNormalizer(),
             ];
 

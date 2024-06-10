@@ -17,6 +17,7 @@ class CreateTest extends AbstractOrderTest
 {
     /**
      * @test
+     *
      * @dataProvider provideDataForRequest
      */
     public function configurationNotSetException(CreateRequest $request): void
