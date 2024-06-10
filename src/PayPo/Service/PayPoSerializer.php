@@ -39,12 +39,7 @@ class PayPoSerializer
 
             $normalizers = [
                 new Normalizer\PropertyNormalizer(
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    [
+                    defaultContext: [
                         Normalizer\PropertyNormalizer::NORMALIZE_VISIBILITY => Normalizer\PropertyNormalizer::NORMALIZE_PUBLIC | Normalizer\PropertyNormalizer::NORMALIZE_PROTECTED,
                     ]
                 ),
