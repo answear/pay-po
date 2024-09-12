@@ -15,6 +15,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class PayPoClient
 {
+    private const CONNECTION_TIMEOUT = 10;
+    private const TIMEOUT = 30;
+    
     private ?\GuzzleHttp\ClientInterface $client;
     private ?Authorization $authorizationService;
 
@@ -66,7 +69,7 @@ class PayPoClient
     private function getClient(): \GuzzleHttp\ClientInterface
     {
         if (null === $this->client) {
-            $this->client = new \GuzzleHttp\Client();
+            $this->client = new \GuzzleHttp\Client(['timeout' => self::TIMEOUT, 'connect_timeout' => self::CONNECTION_TIMEOUT]);
         }
 
         return $this->client;
