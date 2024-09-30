@@ -6,16 +6,15 @@ namespace Answear\PayPo\Service;
 
 use Answear\PayPo\Configuration\PayPoConfiguration;
 use Answear\PayPo\ValueObject\AccessToken;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\RequestOptions;
 
 class Authorization
 {
     private const AUTH_URI = '/oauth/tokens';
-    private \GuzzleHttp\ClientInterface $client;
 
-    public function __construct(\GuzzleHttp\ClientInterface $client)
+    public function __construct(private ClientInterface $client)
     {
-        $this->client = $client;
     }
 
     public function authorize(): void

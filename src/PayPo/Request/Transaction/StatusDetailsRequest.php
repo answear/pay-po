@@ -9,11 +9,8 @@ class StatusDetailsRequest implements RequestInterface
     private const HTTP_METHOD = 'GET';
     private const ENDPOINT = '/transactions';
 
-    private string $transactionId;
-
-    public function __construct(string $transactionId)
+    public function __construct(private readonly string $transactionId)
     {
-        $this->transactionId = $transactionId;
     }
 
     public function getHttpMethod(): string

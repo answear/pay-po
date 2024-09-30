@@ -12,12 +12,10 @@ class ConfirmRequest implements RequestInterface
     private const ENDPOINT = '/transactions';
 
     public string $status;
-    private string $transactionUuid;
 
-    public function __construct(string $transactionUuid)
+    public function __construct(private readonly string $transactionUuid)
     {
-        $this->status = OrderStatusEnum::COMPLETED;
-        $this->transactionUuid = $transactionUuid;
+        $this->status = OrderStatusEnum::Completed->value;
     }
 
     public function getHttpMethod(): string

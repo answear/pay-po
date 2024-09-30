@@ -8,16 +8,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class BadResponseException extends \RuntimeException
 {
-    private ResponseInterface $response;
-
-    public function __construct(ResponseInterface $response, ?\Throwable $t)
-    {
-        parent::__construct('Response error.', 0, $t);
-        $this->response = $response;
-    }
-
-    public function getResponse(): ResponseInterface
-    {
-        return $this->response;
+    public function __construct(
+        public readonly ResponseInterface $response,
+        ?\Throwable $throwable,
+    ) {
+        parent::__construct('Response error.', 0, $throwable);
     }
 }

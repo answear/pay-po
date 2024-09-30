@@ -12,14 +12,13 @@ use Answear\PayPo\ValueObject\Address;
 use Answear\PayPo\ValueObject\Configuration;
 use Answear\PayPo\ValueObject\Customer;
 use Answear\PayPo\ValueObject\Order;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-class CreateTest extends AbstractOrderTest
+class CreateTest extends AbstractOrder
 {
-    /**
-     * @test
-     *
-     * @dataProvider provideDataForRequest
-     */
+    #[Test]
+    #[DataProvider('provideDataForRequest')]
     public function configurationNotSetException(CreateRequest $request): void
     {
         PayPoConfiguration::reset();
@@ -30,16 +29,15 @@ class CreateTest extends AbstractOrderTest
         $this->getOrderService(new PayPoClient($client))->create($request);
     }
 
-    public function provideDataForRequest(): iterable
+    public static function provideDataForRequest(): iterable
     {
-        $this->setUpConfiguration();
+        self::setUpConfiguration();
 
         yield [
             new CreateRequest(
                 new Order(
                     'ref-id-02',
                     2531,
-                    'Description of data',
                     new Address(
                         'billing street',
                         'houseNumber',
@@ -55,7 +53,8 @@ class CreateTest extends AbstractOrderTest
                         'postal',
                         'city',
                         'country'
-                    )
+                    ),
+                    'Description of data',
                 ),
                 new Customer(
                     'name',
@@ -69,7 +68,7 @@ class CreateTest extends AbstractOrderTest
                     null
                 )
             ),
-            '{"merchantId":"e626aba7-598c-4746-9da7-03a9290bddfc","order":{"referenceId":"ref-id-02","amount":2531,"description":"Description of data","billingAddress":{"street":"billing street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"country"},"shippingAddress":{"street":"shipping street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"country"}},"customer":{"name":"name","surname":"surname","email":"email","phone":"phone"},"configuration":{"returnUrl":"returnUrl","notifyUrl":"notifyUrl"}}',
+            '{"merchantId":"e626aba7-598c-4746-9da7-03a9290bddfc","order":{"referenceId":"ref-id-02","amount":2531,"billingAddress":{"street":"billing street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"country"},"shippingAddress":{"street":"shipping street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"country"},"description":"Description of data"},"customer":{"name":"name","surname":"surname","email":"email","phone":"phone"},"configuration":{"returnUrl":"returnUrl","notifyUrl":"notifyUrl"}}',
             [
                 'transactionId' => '201',
                 'redirectUrl' => 'https://redirect.url',

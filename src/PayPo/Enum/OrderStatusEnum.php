@@ -4,49 +4,17 @@ declare(strict_types=1);
 
 namespace Answear\PayPo\Enum;
 
-use MabeEnum\Enum;
-
-class OrderStatusEnum extends Enum
+enum OrderStatusEnum: string
 {
-    public const NEW = 'NEW';
-    public const PENDING = 'PENDING';
-    public const ACCEPTED = 'ACCEPTED';
-    public const COMPLETED = 'COMPLETED';
-    public const REJECTED = 'REJECTED';
-    public const CANCELED = 'CANCELED';
-
-    public static function new(): self
-    {
-        return static::get(static::NEW);
-    }
-
-    public static function pending(): self
-    {
-        return static::get(static::PENDING);
-    }
-
-    public static function accepted(): self
-    {
-        return static::get(static::ACCEPTED);
-    }
-
-    public static function completed(): self
-    {
-        return static::get(static::COMPLETED);
-    }
-
-    public static function rejected(): self
-    {
-        return static::get(static::REJECTED);
-    }
-
-    public static function canceled(): self
-    {
-        return static::get(static::CANCELED);
-    }
+    case New = 'NEW';
+    case Pending = 'PENDING';
+    case Accepted = 'ACCEPTED';
+    case Completed = 'COMPLETED';
+    case Rejected = 'REJECTED';
+    case Canceled = 'CANCELED';
 
     public function isFinal(): bool
     {
-        return $this->is(self::completed()) || $this->is(self::rejected()) || $this->is(self::canceled());
+        return self::Completed === $this || self::Rejected === $this || self::Canceled === $this;
     }
 }

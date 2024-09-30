@@ -16,19 +16,13 @@ class CreateRequest implements RequestInterface
 
     public string $merchantId;
     public ?string $shopId = null;
-    public Order $order;
-    public Customer $customer;
-    public Configuration $configuration;
 
     public function __construct(
-        Order $order,
-        Customer $customer,
-        Configuration $configuration
+        public readonly Order $order,
+        public readonly Customer $customer,
+        public readonly Configuration $configuration,
     ) {
         $this->merchantId = PayPoConfiguration::getClientId();
-        $this->order = $order;
-        $this->customer = $customer;
-        $this->configuration = $configuration;
     }
 
     public function getHttpMethod(): string

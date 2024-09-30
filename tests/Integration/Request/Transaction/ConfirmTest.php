@@ -7,16 +7,15 @@ namespace Answear\PayPo\Tests\Integration\Request\Transaction;
 use Answear\PayPo\Configuration\PayPoConfiguration;
 use Answear\PayPo\Exception\ConfigurationException;
 use Answear\PayPo\Service\PayPoClient;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-class ConfirmTest extends AbstractOrderTest
+class ConfirmTest extends AbstractOrder
 {
     private const TRANSACTION_UUID = 'transaction-uuid';
 
-    /**
-     * @test
-     *
-     * @dataProvider provideDataForRequest
-     */
+    #[Test]
+    #[DataProvider('provideDataForRequest')]
     public function configurationNotSetException(string $transactionUuid): void
     {
         PayPoConfiguration::reset();
@@ -27,9 +26,9 @@ class ConfirmTest extends AbstractOrderTest
         $this->getOrderService(new PayPoClient($client))->confirm($transactionUuid);
     }
 
-    public function provideDataForRequest(): iterable
+    public static function provideDataForRequest(): iterable
     {
-        $this->setUpConfiguration();
+        self::setUpConfiguration();
 
         yield [
             self::TRANSACTION_UUID,

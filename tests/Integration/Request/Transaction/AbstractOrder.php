@@ -9,9 +9,11 @@ use Answear\PayPo\Service\Order;
 use Answear\PayPo\Service\PayPoClient;
 use Answear\PayPo\ValueObject\AccessToken;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractOrderTest extends TestCase
+abstract class AbstractOrder extends TestCase
 {
     protected function tearDown(): void
     {
@@ -19,16 +21,13 @@ abstract class AbstractOrderTest extends TestCase
         AccessToken::reset();
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider provideDataForRequest
-     */
+    #[Test]
+    #[DataProvider('provideDataForRequest')]
     public function successfullySend($request, string $expectedRequest, array $apiResponse): void
     {
-        $this->setUpConfiguration();
+        self::setUpConfiguration();
 
-        $clientResponse = new Response(200, [], json_encode($apiResponse, JSON_THROW_ON_ERROR, 512));
+        $clientResponse = new Response(200, [], json_encode($apiResponse, JSON_THROW_ON_ERROR));
 
         $client = $this->createMock(\GuzzleHttp\Client::class);
         $client->expects(self::once())
@@ -71,15 +70,15 @@ abstract class AbstractOrderTest extends TestCase
         return new Order($client);
     }
 
-    abstract public function provideDataForRequest(): iterable;
+    abstract public static function provideDataForRequest(): iterable;
 
     abstract protected function sendAndAssert(
         PayPoClient $client,
         $request,
-        array $apiResponse
+        array $apiResponse,
     ): void;
 
-    protected function setUpConfiguration(): void
+    protected static function setUpConfiguration(): void
     {
         PayPoConfiguration::setForSandbox('e626aba7-598c-4746-9da7-03a9290bddfc', 'apiKey');
     }

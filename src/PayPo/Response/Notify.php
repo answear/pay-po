@@ -8,27 +8,19 @@ use Answear\PayPo\Enum\OrderStatusEnum;
 
 class Notify
 {
-    public string $merchantId;
     public ?string $shopId;
-    public string $referenceId;
-    public string $transactionId;
-    public OrderStatusEnum $transactionStatus;
-    public int $amount;
-    public \DateTimeImmutable $lastUpdate;
+    public readonly OrderStatusEnum $transactionStatus;
+    public readonly \DateTimeImmutable $lastUpdate;
 
     private function __construct(
-        string $merchantId,
-        string $referenceId,
-        string $transactionId,
+        public readonly string $merchantId,
+        public readonly string $referenceId,
+        public readonly string $transactionId,
         string $transactionStatus,
-        int $amount,
-        string $lastUpdate
+        public readonly int $amount,
+        string $lastUpdate,
     ) {
-        $this->merchantId = $merchantId;
-        $this->referenceId = $referenceId;
-        $this->transactionId = $transactionId;
-        $this->transactionStatus = OrderStatusEnum::get($transactionStatus);
-        $this->amount = $amount;
+        $this->transactionStatus = OrderStatusEnum::from($transactionStatus);
         $this->lastUpdate = new \DateTimeImmutable($lastUpdate);
     }
 

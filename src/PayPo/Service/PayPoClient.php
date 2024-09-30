@@ -8,6 +8,8 @@ use Answear\PayPo\Configuration\PayPoConfiguration;
 use Answear\PayPo\Request\Transaction\RequestInterface;
 use Answear\PayPo\Util\AuthenticationUtil;
 use Answear\PayPo\ValueObject\AccessToken;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
@@ -17,16 +19,11 @@ class PayPoClient
 {
     private const CONNECTION_TIMEOUT = 10;
     private const TIMEOUT = 30;
-    
-    private ?\GuzzleHttp\ClientInterface $client;
-    private ?Authorization $authorizationService;
 
     public function __construct(
-        ?\GuzzleHttp\ClientInterface $client = null,
-        ?Authorization $authorizationService = null
+        private ?ClientInterface $client = null,
+        private ?Authorization $authorizationService = null,
     ) {
-        $this->client = $client;
-        $this->authorizationService = $authorizationService;
     }
 
     /**
@@ -66,10 +63,10 @@ class PayPoClient
         );
     }
 
-    private function getClient(): \GuzzleHttp\ClientInterface
+    private function getClient(): ClientInterface
     {
         if (null === $this->client) {
-            $this->client = new \GuzzleHttp\Client(['timeout' => self::TIMEOUT, 'connect_timeout' => self::CONNECTION_TIMEOUT]);
+            $this->client = new Client(['timeout' => self::TIMEOUT, 'connect_timeout' => self::CONNECTION_TIMEOUT]);
         }
 
         return $this->client;
