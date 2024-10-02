@@ -17,8 +17,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class PayPoClient
 {
-    private const CONNECTION_TIMEOUT = 10;
-    private const TIMEOUT = 30;
+    public const CONNECTION_TIMEOUT = 10;
+    public const TIMEOUT = 30;
 
     public function __construct(
         private ?ClientInterface $client = null,

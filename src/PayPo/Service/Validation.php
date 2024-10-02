@@ -28,7 +28,7 @@ class Validation
     private function getClient(): ClientInterface
     {
         if (null === $this->client) {
-            $this->client = new Client();
+            $this->client = new Client(['timeout' => PayPoClient::TIMEOUT, 'connect_timeout' => PayPoClient::CONNECTION_TIMEOUT]);
         }
 
         return $this->client;
