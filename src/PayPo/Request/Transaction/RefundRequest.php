@@ -9,13 +9,10 @@ class RefundRequest implements RequestInterface
     private const HTTP_METHOD = 'POST';
     private const ENDPOINT = '/transactions';
 
-    private string $transactionUuid;
-    public int $amount;
-
-    public function __construct(string $transactionUuid, int $amount)
-    {
-        $this->transactionUuid = $transactionUuid;
-        $this->amount = $amount;
+    public function __construct(
+        private readonly string $transactionUuid,
+        public readonly int $amount,
+    ) {
     }
 
     public function getHttpMethod(): string

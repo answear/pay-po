@@ -22,12 +22,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class Order
 {
-    private ?PayPoSerializer $serializer;
-    private PayPoClient $client;
-
-    public function __construct(?PayPoClient $client = null, ?PayPoSerializer $serializer = null)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private ?PayPoClient $client = null,
+        private ?PayPoSerializer $serializer = null,
+    ) {
         $this->client = $client ?? new PayPoClient();
     }
 

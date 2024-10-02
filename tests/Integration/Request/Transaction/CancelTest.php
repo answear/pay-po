@@ -8,16 +8,15 @@ use Answear\PayPo\Configuration\PayPoConfiguration;
 use Answear\PayPo\Exception\ConfigurationException;
 use Answear\PayPo\Service\PayPoClient;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-class CancelTest extends AbstractOrderTest
+class CancelTest extends AbstractOrder
 {
     private const TRANSACTION_UUID = 'transaction-uuid';
 
-    /**
-     * @test
-     *
-     * @dataProvider provideDataForRequest
-     */
+    #[Test]
+    #[DataProvider('provideDataForRequest')]
     public function configurationNotSetException(string $transactionUuid): void
     {
         PayPoConfiguration::reset();
@@ -28,9 +27,9 @@ class CancelTest extends AbstractOrderTest
         $this->getOrderService(new PayPoClient($client))->cancel($transactionUuid);
     }
 
-    public function provideDataForRequest(): iterable
+    public static function provideDataForRequest(): iterable
     {
-        $this->setUpConfiguration();
+        self::setUpConfiguration();
 
         yield [
             self::TRANSACTION_UUID,

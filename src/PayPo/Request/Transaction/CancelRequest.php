@@ -12,12 +12,10 @@ class CancelRequest implements RequestInterface
     private const ENDPOINT = '/transactions';
 
     public string $status;
-    private string $transactionUuid;
 
-    public function __construct(string $transactionUuid)
+    public function __construct(private readonly string $transactionUuid)
     {
-        $this->status = OrderStatusEnum::CANCELED;
-        $this->transactionUuid = $transactionUuid;
+        $this->status = OrderStatusEnum::Canceled->value;
     }
 
     public function getHttpMethod(): string

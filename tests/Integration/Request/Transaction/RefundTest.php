@@ -7,17 +7,16 @@ namespace Answear\PayPo\Tests\Integration\Request\Transaction;
 use Answear\PayPo\Configuration\PayPoConfiguration;
 use Answear\PayPo\Exception\ConfigurationException;
 use Answear\PayPo\Service\PayPoClient;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-class RefundTest extends AbstractOrderTest
+class RefundTest extends AbstractOrder
 {
     private const TRANSACTION_ID = 'tranaction-id';
     private const AMOUNT = 328264;
 
-    /**
-     * @test
-     *
-     * @dataProvider provideDataForRequest
-     */
+    #[Test]
+    #[DataProvider('provideDataForRequest')]
     public function configurationNotSetException($request): void
     {
         PayPoConfiguration::reset();
@@ -28,9 +27,9 @@ class RefundTest extends AbstractOrderTest
         $this->getOrderService(new PayPoClient($client))->refund(...$request);
     }
 
-    public function provideDataForRequest(): iterable
+    public static function provideDataForRequest(): iterable
     {
-        $this->setUpConfiguration();
+        self::setUpConfiguration();
 
         yield [
             [

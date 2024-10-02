@@ -9,16 +9,15 @@ use Answear\PayPo\Enum\OrderStatusEnum;
 use Answear\PayPo\Enum\SettlementStatusEnum;
 use Answear\PayPo\Exception\ConfigurationException;
 use Answear\PayPo\Service\PayPoClient;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-class StatusDetailsTest extends AbstractOrderTest
+class StatusDetailsTest extends AbstractOrder
 {
     private const TRANSACTION_UUID = 'transaction-uuid';
 
-    /**
-     * @test
-     *
-     * @dataProvider provideDataForRequest
-     */
+    #[Test]
+    #[DataProvider('provideDataForRequest')]
     public function configurationNotSetException(string $transactionUuid): void
     {
         PayPoConfiguration::reset();
@@ -29,9 +28,9 @@ class StatusDetailsTest extends AbstractOrderTest
         $this->getOrderService(new PayPoClient($client))->getStatusDetails($transactionUuid);
     }
 
-    public function provideDataForRequest(): iterable
+    public static function provideDataForRequest(): iterable
     {
-        $this->setUpConfiguration();
+        self::setUpConfiguration();
 
         yield [
             self::TRANSACTION_UUID,
@@ -58,9 +57,9 @@ class StatusDetailsTest extends AbstractOrderTest
         self::assertSame($apiResponse['merchantId'], $response->merchantId);
         self::assertSame($apiResponse['referenceId'], $response->referenceId);
         self::assertSame($apiResponse['transactionId'], $response->transactionId);
-        self::assertTrue($response->transactionStatus->is(OrderStatusEnum::completed()));
+        self::assertSame($response->transactionStatus, OrderStatusEnum::Completed);
         self::assertSame($apiResponse['amount'], $response->amount);
-        self::assertTrue($response->settlementStatus->is(SettlementStatusEnum::paid()));
+        self::assertSame($response->settlementStatus, SettlementStatusEnum::Paid);
         self::assertSame(
             $apiResponse['lastUpdate'] . '+00:00',
             $response->lastUpdate->format(\DateTimeInterface::RFC3339)
