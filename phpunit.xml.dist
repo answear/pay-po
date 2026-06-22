@@ -12,7 +12,7 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <env name="SYMFONY_WARNINGS_HELPER" value="weak"/>
-
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
     </php>
     <testsuites>
         <testsuite name="Answear PayPo Test Suite">

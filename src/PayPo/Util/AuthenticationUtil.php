@@ -28,7 +28,7 @@ class AuthenticationUtil
         string $httpMethod,
         string $endpoint,
         array $payload,
-        string $secretKey
+        string $secretKey,
     ): void {
         $json = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $data = implode(

@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-$config = new PhpCsFixer\Config();
-
-$finder = $config->getFinder()
+$finder = (new PhpCsFixer\Finder())
+    ->in(__DIR__)
     ->exclude(
         [
             'vendor',
         ]
-    )
-    ->in(__DIR__);
+    );
 
-return $config
+return (new PhpCsFixer\Config())
+    ->setFinder($finder)
     ->registerCustomFixers([])
     ->setRules(
         [
@@ -36,5 +35,10 @@ return $config
                 ],
                 'sort_algorithm' => 'alpha',
             ],
+            'phpdoc_separation' => ['skip_unlisted_annotations' => true],
+            'nullable_type_declaration' => true,
+            'nullable_type_declaration_for_default_null_value' => true,
+            'trailing_comma_in_multiline' => ['elements' => ['arrays', 'parameters']],
         ]
-    );
+    )
+    ->setRiskyAllowed(true);
