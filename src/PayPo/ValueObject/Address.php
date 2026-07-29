@@ -13,6 +13,7 @@ class Address
         public string $zip,
         public string $city,
         public ?string $country = null,
+        public ?string $county = null,
     ) {
     }
 }

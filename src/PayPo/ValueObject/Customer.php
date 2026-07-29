@@ -11,6 +11,8 @@ class Customer
         public string $surname,
         public string $email,
         public string $phone,
+        public ?RegistrationInfo $registrationInfo = null,
+        public ?TransactionsInfo $transactionsInfo = null,
     ) {
     }
 }

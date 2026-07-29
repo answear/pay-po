@@ -80,6 +80,6 @@ abstract class AbstractOrder extends TestCase
 
     protected static function setUpConfiguration(): void
     {
-        PayPoConfiguration::setForSandbox('e626aba7-598c-4746-9da7-03a9290bddfc', 'apiKey');
+        PayPoConfiguration::setForSandbox('e626aba7-598c-4746-9da7-03a9290bddfc', 'apiKey', 'api.sandbox.paypo.pl');
     }
 }

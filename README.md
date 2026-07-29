@@ -1,6 +1,8 @@
 # PayPo PHP library
 
-Documentation of the API can be found here: [https://paypo.pl/home/integracja](https://paypo.pl/biznes/integracja).
+Documentation of the API can be found here: 
+* PL - [https://paypo.pl/home/integracja](https://paypo.pl/biznes/integracja).
+* RO - [https://paypo.ro/p/comercianti/integrare](https://paypo.ro/p/comercianti/integrare).
 
 
 Installation
@@ -21,7 +23,7 @@ use Answear\PayPo\Request\Transaction\CreateRequest;
 use Answear\PayPo\Service\Order;
 //...
 
-PayPoConfiguration::setForSandbox(6, 'apiKey');
+PayPoConfiguration::setForSandbox(6, 'apiKey', 'api.sandbox.paypo.pl');
 
 $orderService = new Order();
 $registerResponse = $orderService->create(new CreateRequest(...));

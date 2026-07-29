@@ -13,14 +13,14 @@ use PHPUnit\Framework\TestCase;
 
 class AuthorizationTest extends TestCase
 {
-    private const TOKEN = 'token-';
+    private const string TOKEN = 'token-';
 
     /**
      * @test
      */
     public function accessTokenSetTest(): void
     {
-        PayPoConfiguration::setForSandbox('clientId', 'clientSecret');
+        PayPoConfiguration::setForSandbox('clientId', 'clientSecret', 'api.sandbox.paypo.pl');
 
         $this->getService()->authorize();
 
