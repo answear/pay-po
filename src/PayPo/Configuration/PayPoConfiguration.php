@@ -8,21 +8,20 @@ use Answear\PayPo\Exception\ConfigurationException;
 
 class PayPoConfiguration
 {
-    private const PROD_URL = 'https://api.paypo.pl/v3';
-    private const SANDBOX_URL = 'https://api.sandbox.paypo.pl/v3';
+    private const string URL_TEMPLATE = 'https://%s/v3';
 
     private static ?string $apiUrl;
     private static ?string $clientId;
     private static ?string $clientSecret;
 
-    public static function setForProduction(string $clientId, string $clientSecret): void
+    public static function setForProduction(string $clientId, string $clientSecret, string $host): void
     {
-        self::setUp(self::PROD_URL, $clientId, $clientSecret);
+        self::setUp(sprintf(self::URL_TEMPLATE, self::normalizeHost($host)), $clientId, $clientSecret);
     }
 
-    public static function setForSandbox(string $clientId, string $clientSecret): void
+    public static function setForSandbox(string $clientId, string $clientSecret, string $host): void
     {
-        self::setUp(self::SANDBOX_URL, $clientId, $clientSecret);
+        self::setUp(sprintf(self::URL_TEMPLATE, self::normalizeHost($host)), $clientId, $clientSecret);
     }
 
     public static function getApiUrl(): string
@@ -51,6 +50,17 @@ class PayPoConfiguration
         self::$apiUrl = null;
         self::$clientId = null;
         self::$clientSecret = null;
+    }
+
+    private static function normalizeHost(string $host): string
+    {
+        $host = rtrim((string) preg_replace('#^https?://#i', '', trim($host)), '/');
+
+        if ('' === $host) {
+            throw new ConfigurationException('PayPo host cannot be empty. Provide a hostname, eg. api.paypo.pl.');
+        }
+
+        return $host;
     }
 
     private static function setUp(string $apiUrl, string $clientId, string $clientSecret): void

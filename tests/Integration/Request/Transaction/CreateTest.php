@@ -12,6 +12,8 @@ use Answear\PayPo\ValueObject\Address;
 use Answear\PayPo\ValueObject\Configuration;
 use Answear\PayPo\ValueObject\Customer;
 use Answear\PayPo\ValueObject\Order;
+use Answear\PayPo\ValueObject\RegistrationInfo;
+use Answear\PayPo\ValueObject\TransactionsInfo;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -72,6 +74,52 @@ class CreateTest extends AbstractOrder
             [
                 'transactionId' => '201',
                 'redirectUrl' => 'https://redirect.url',
+            ],
+        ];
+
+        yield 'RO market with county and scoring fields' => [
+            new CreateRequest(
+                new Order(
+                    'ref-id-03',
+                    2531,
+                    new Address(
+                        'billing street',
+                        'houseNumber',
+                        'apartmentNumber',
+                        'postal',
+                        'city',
+                        'RO',
+                        'Cluj',
+                    ),
+                    new Address(
+                        'shipping street',
+                        'houseNumber',
+                        'apartmentNumber',
+                        'postal',
+                        'city',
+                        'RO',
+                        'Cluj',
+                    ),
+                    'Description of data',
+                ),
+                new Customer(
+                    'name',
+                    'surname',
+                    'email',
+                    'phone',
+                    new RegistrationInfo(true, '2022-01-01'),
+                    new TransactionsInfo('3', 123456),
+                ),
+                new Configuration(
+                    'returnUrl',
+                    'notifyUrl',
+                    null
+                )
+            ),
+            '{"merchantId":"e626aba7-598c-4746-9da7-03a9290bddfc","order":{"referenceId":"ref-id-03","amount":2531,"billingAddress":{"street":"billing street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"RO","county":"Cluj"},"shippingAddress":{"street":"shipping street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"RO","county":"Cluj"},"description":"Description of data"},"customer":{"name":"name","surname":"surname","email":"email","phone":"phone","registrationInfo":{"isRegistered":true,"dateOfRegistration":"2022-01-01"},"transactionsInfo":{"numberOfTransactions":"3","sumOfTransactions":123456}},"configuration":{"returnUrl":"returnUrl","notifyUrl":"notifyUrl"}}',
+            [
+                'transactionId' => '301',
+                'redirectUrl' => 'https://redirect.url/ro',
             ],
         ];
     }
