@@ -108,7 +108,7 @@ class CreateTest extends AbstractOrder
                     'email',
                     'phone',
                     new RegistrationInfo(true, '2022-01-01'),
-                    new TransactionsInfo('3', 123456),
+                    new TransactionsInfo(3, 123456),
                 ),
                 new Configuration(
                     'returnUrl',
@@ -116,7 +116,7 @@ class CreateTest extends AbstractOrder
                     null
                 )
             ),
-            '{"merchantId":"e626aba7-598c-4746-9da7-03a9290bddfc","order":{"referenceId":"ref-id-03","amount":2531,"billingAddress":{"street":"billing street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"RO","county":"Cluj"},"shippingAddress":{"street":"shipping street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"RO","county":"Cluj"},"description":"Description of data"},"customer":{"name":"name","surname":"surname","email":"email","phone":"phone","registrationInfo":{"isRegistered":true,"dateOfRegistration":"2022-01-01"},"transactionsInfo":{"numberOfTransactions":"3","sumOfTransactions":123456}},"configuration":{"returnUrl":"returnUrl","notifyUrl":"notifyUrl"}}',
+            '{"merchantId":"e626aba7-598c-4746-9da7-03a9290bddfc","order":{"referenceId":"ref-id-03","amount":2531,"billingAddress":{"street":"billing street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"RO","county":"Cluj"},"shippingAddress":{"street":"shipping street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"RO","county":"Cluj"},"description":"Description of data"},"customer":{"name":"name","surname":"surname","email":"email","phone":"phone","registrationInfo":{"isRegistered":true,"dateOfRegistration":"2022-01-01"},"transactionsInfo":{"numberOfTransactions":3,"sumOfTransactions":123456}},"configuration":{"returnUrl":"returnUrl","notifyUrl":"notifyUrl"}}',
             [
                 'transactionId' => '301',
                 'redirectUrl' => 'https://redirect.url/ro',
