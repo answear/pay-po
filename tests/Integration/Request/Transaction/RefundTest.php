@@ -14,6 +14,7 @@ class RefundTest extends AbstractOrder
 {
     private const TRANSACTION_ID = 'tranaction-id';
     private const AMOUNT = 328264;
+    private const REFERENCE_REFUND_ID = '3e12a361-d193-4f3a-88b5-b8fda405a529';
 
     #[Test]
     #[DataProvider('provideDataForRequest')]
@@ -31,7 +32,7 @@ class RefundTest extends AbstractOrder
     {
         self::setUpConfiguration();
 
-        yield [
+        yield 'without referenceRefundId' => [
             [
                 self::TRANSACTION_ID,
                 self::AMOUNT,
@@ -42,21 +43,29 @@ class RefundTest extends AbstractOrder
                 'message' => 'Refund request accepted',
             ],
         ];
+
+        yield 'with referenceRefundId' => [
+            [
+                self::TRANSACTION_ID,
+                self::AMOUNT,
+                self::REFERENCE_REFUND_ID,
+            ],
+            '{"amount":328264,"referenceRefundId":"' . self::REFERENCE_REFUND_ID . '"}',
+            [
+                'code' => 201,
+                'message' => 'Refund created successfully',
+            ],
+        ];
     }
 
     protected function sendAndAssert(PayPoClient $client, $request, array $apiResponse): void
     {
-        self::assertSame(
-            [
-                self::TRANSACTION_ID,
-                self::AMOUNT,
-            ],
-            $request
-        );
+        self::assertSame(self::TRANSACTION_ID, $request[0]);
+        self::assertSame(self::AMOUNT, $request[1]);
 
         $response = $this->getOrderService($client)->refund(...$request);
 
-        self::assertSame($apiResponse['code'], $response->code);
+        self::assertSame((string) $apiResponse['code'], $response->code);
         self::assertSame($apiResponse['message'], $response->message);
     }
 }

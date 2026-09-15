@@ -30,7 +30,16 @@ class ConfirmTest extends AbstractOrder
     {
         self::setUpConfiguration();
 
-        yield [
+        yield 'response as documented' => [
+            self::TRANSACTION_UUID,
+            '{"status":"COMPLETED"}',
+            [
+                'code' => 200,
+                'message' => 'Transaction updated successfully',
+            ],
+        ];
+
+        yield 'response with statusDescription' => [
             self::TRANSACTION_UUID,
             '{"status":"COMPLETED"}',
             [
@@ -46,7 +55,10 @@ class ConfirmTest extends AbstractOrder
 
         $response = $this->getOrderService($client)->confirm($request);
 
-        self::assertSame($apiResponse['code'], $response->code);
-        self::assertSame($apiResponse['statusDescription'], $response->statusDescription);
+        $expectedMessage = $apiResponse['message'] ?? $apiResponse['statusDescription'];
+
+        self::assertSame((string) $apiResponse['code'], $response->code);
+        self::assertSame($expectedMessage, $response->message);
+        self::assertSame($expectedMessage, $response->statusDescription);
     }
 }
