@@ -7,8 +7,10 @@ namespace Answear\PayPo\Tests\Integration\Request\Transaction;
 use Answear\PayPo\Configuration\PayPoConfiguration;
 use Answear\PayPo\Enum\OrderStatusEnum;
 use Answear\PayPo\Enum\SettlementStatusEnum;
+use Answear\PayPo\Exception\BadResponseException;
 use Answear\PayPo\Exception\ConfigurationException;
 use Answear\PayPo\Service\PayPoClient;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -28,6 +30,29 @@ class StatusDetailsTest extends AbstractOrder
         $this->getOrderService(new PayPoClient($client))->getStatusDetails($transactionUuid);
     }
 
+    #[Test]
+    public function incompleteRefundEntryIsBadResponse(): void
+    {
+        self::setUpConfiguration();
+
+        $apiResponse = self::basicResponse();
+        $apiResponse['refunds'] = [['referenceRefundId' => 'refund-id']];
+
+        $client = $this->createMock(\GuzzleHttp\Client::class);
+        $client->method('send')->willReturn(new Response(200, [], json_encode($apiResponse, JSON_THROW_ON_ERROR)));
+        $client->method('request')->willReturn(
+            new Response(
+                200,
+                [],
+                json_encode(['token_type' => 'Bearer', 'expires_in' => 1800, 'access_token' => 'access-token'], JSON_THROW_ON_ERROR)
+            )
+        );
+
+        $this->expectException(BadResponseException::class);
+
+        $this->getOrderService(new PayPoClient($client))->getStatusDetails(self::TRANSACTION_UUID);
+    }
+
     public static function provideDataForRequest(): iterable
     {
         self::setUpConfiguration();
@@ -35,30 +60,19 @@ class StatusDetailsTest extends AbstractOrder
         yield 'basic response' => [
             self::TRANSACTION_UUID,
             '',
-            [
-                'merchantId' => '19c692be-a893-468c-a65f-b8de442e5443',
-                'referenceId' => 'ord_987654',
-                'transactionId' => 'cd975bc6-a755-4141-b7a0-d7e8f7a308ef',
-                'transactionStatus' => 'COMPLETED',
-                'transactionUrl' => 'https://transaction-url.fake',
-                'amount' => 24900,
-                'settlementStatus' => 'PAID',
-                'lastUpdate' => '2020-03-05T10:54:02',
-            ],
+            self::basicResponse(),
+        ];
+
+        yield 'extended response without refunds' => [
+            self::TRANSACTION_UUID,
+            '',
+            self::basicResponse() + ['refunds' => []],
         ];
 
         yield 'extended response with refunds' => [
             self::TRANSACTION_UUID,
             '',
-            [
-                'merchantId' => '19c692be-a893-468c-a65f-b8de442e5443',
-                'referenceId' => 'ord_987654',
-                'transactionId' => 'cd975bc6-a755-4141-b7a0-d7e8f7a308ef',
-                'transactionStatus' => 'COMPLETED',
-                'transactionUrl' => 'https://transaction-url.fake',
-                'amount' => 24900,
-                'settlementStatus' => 'PAID',
-                'lastUpdate' => '2020-03-05T10:54:02',
+            self::basicResponse() + [
                 'refunds' => [
                     [
                         'referenceRefundId' => '3e12a361-d193-4f3a-88b5-b8fda405a529',
@@ -72,6 +86,20 @@ class StatusDetailsTest extends AbstractOrder
                     ],
                 ],
             ],
+        ];
+    }
+
+    private static function basicResponse(): array
+    {
+        return [
+            'merchantId' => '19c692be-a893-468c-a65f-b8de442e5443',
+            'referenceId' => 'ord_987654',
+            'transactionId' => 'cd975bc6-a755-4141-b7a0-d7e8f7a308ef',
+            'transactionStatus' => 'COMPLETED',
+            'transactionUrl' => 'https://transaction-url.fake',
+            'amount' => 24900,
+            'settlementStatus' => 'PAID',
+            'lastUpdate' => '2020-03-05T10:54:02',
         ];
     }
 
@@ -93,7 +121,14 @@ class StatusDetailsTest extends AbstractOrder
             $response->lastUpdate->format(\DateTimeInterface::RFC3339)
         );
 
-        $expectedRefunds = $apiResponse['refunds'] ?? [];
+        if (!\array_key_exists('refunds', $apiResponse)) {
+            self::assertNull($response->refunds);
+            self::assertNull($response->findRefund('3e12a361-d193-4f3a-88b5-b8fda405a529'));
+
+            return;
+        }
+
+        $expectedRefunds = $apiResponse['refunds'];
         self::assertCount(\count($expectedRefunds), $response->refunds);
 
         foreach ($expectedRefunds as $key => $expectedRefund) {

@@ -8,7 +8,6 @@ class RefundRequest implements RequestInterface
 {
     private const HTTP_METHOD = 'POST';
     private const ENDPOINT = '/transactions';
-    public const REFERENCE_REFUND_ID_MAX_LENGTH = 68;
 
     public function __construct(
         private readonly string $transactionUuid,

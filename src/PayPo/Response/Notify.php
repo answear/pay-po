@@ -15,6 +15,7 @@ class Notify
     public readonly OrderStatusEnum $transactionStatus;
     public readonly ?SettlementStatusEnum $settlementStatus;
     public readonly \DateTimeImmutable $lastUpdate;
+    private readonly bool $settlementNotify;
 
     private function __construct(
         public readonly string $merchantId,
@@ -28,7 +29,8 @@ class Notify
         public readonly ?string $message = null,
     ) {
         $this->transactionStatus = OrderStatusEnum::from($transactionStatus);
-        $this->settlementStatus = null === $settlementStatus ? null : SettlementStatusEnum::from($settlementStatus);
+        $this->settlementNotify = null !== $settlementStatus;
+        $this->settlementStatus = null === $settlementStatus ? null : SettlementStatusEnum::tryFrom($settlementStatus);
         $this->lastUpdate = new \DateTimeImmutable($lastUpdate);
     }
 
@@ -53,6 +55,6 @@ class Notify
 
     public function isSettlementNotify(): bool
     {
-        return null !== $this->settlementStatus;
+        return $this->settlementNotify;
     }
 }

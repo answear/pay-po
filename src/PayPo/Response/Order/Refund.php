@@ -21,6 +21,10 @@ readonly class Refund
      */
     public static function fromArray(array $refund): self
     {
+        if (!isset($refund['amount'], $refund['created'])) {
+            throw new \InvalidArgumentException('Refund entry requires amount and created.');
+        }
+
         return new self(
             isset($refund['referenceRefundId']) ? (string) $refund['referenceRefundId'] : null,
             (int) $refund['amount'],

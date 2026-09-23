@@ -10,7 +10,7 @@ readonly class ApiError
      * @param ErrorDetail[] $errors
      */
     public function __construct(
-        public ?int $code,
+        public ?string $code,
         public ?string $message,
         public array $errors = [],
     ) {
@@ -24,7 +24,7 @@ readonly class ApiError
         }
 
         return new self(
-            isset($data['code']) ? (int) $data['code'] : null,
+            isset($data['code']) ? (string) $data['code'] : null,
             isset($data['message']) ? (string) $data['message'] : null,
             self::parseErrors($data['errors'] ?? []),
         );

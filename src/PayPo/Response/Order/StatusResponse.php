@@ -14,12 +14,12 @@ readonly class StatusResponse
     public \DateTimeImmutable $lastUpdate;
 
     /**
-     * @var Refund[]
+     * @var Refund[]|null
      */
-    public array $refunds;
+    public ?array $refunds;
 
     /**
-     * @param array<mixed> $refunds
+     * @param array<mixed>|null $refunds
      */
     public function __construct(
         public string $merchantId,
@@ -30,24 +30,21 @@ readonly class StatusResponse
         string $settlementStatus,
         string $lastUpdate,
         public ?string $transactionUrl = null,
-        array $refunds = [],
+        ?array $refunds = null,
     ) {
         $this->transactionStatus = OrderStatusEnum::from($transactionStatus);
         $this->settlementStatus = SettlementStatusEnum::from($settlementStatus);
         $this->lastUpdate = new \DateTimeImmutable($lastUpdate);
 
-        $parsedRefunds = [];
-        foreach ($refunds as $refund) {
-            if (\is_array($refund)) {
-                $parsedRefunds[] = Refund::fromArray($refund);
-            }
-        }
-        $this->refunds = $parsedRefunds;
+        $this->refunds = null === $refunds ? null : array_map(
+            static fn (mixed $refund): Refund => Refund::fromArray(\is_array($refund) ? $refund : []),
+            array_values($refunds)
+        );
     }
 
     public function findRefund(string $referenceRefundId): ?Refund
     {
-        foreach ($this->refunds as $refund) {
+        foreach ($this->refunds ?? [] as $refund) {
             if ($referenceRefundId === $refund->referenceRefundId) {
                 return $refund;
             }

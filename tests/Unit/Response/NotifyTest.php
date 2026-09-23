@@ -64,4 +64,24 @@ class NotifyTest extends TestCase
         self::assertNull($notify->transactionUrl);
         self::assertTrue($notify->isSettlementNotify());
     }
+
+    #[Test]
+    public function unknownSettlementStatusIsStillSettlementNotify(): void
+    {
+        $notify = Notify::fromRawNotify(
+            [
+                'merchantId' => '0e1576d8-e760-4336-8bc4-c20a549ac035',
+                'referenceId' => 'QQBF6HAWVGI972291WQQ',
+                'transactionId' => '9207c39a-1d1f-4954-a312-fe5dcd1a1f8a',
+                'transactionStatus' => 'COMPLETED',
+                'amount' => 1212,
+                'lastUpdate' => '2021-07-27T18:44:51.000+02:00',
+                'settlementStatus' => 'SOMETHING_NEW',
+                'message' => 'Transaction is settled',
+            ]
+        );
+
+        self::assertNull($notify->settlementStatus);
+        self::assertTrue($notify->isSettlementNotify());
+    }
 }

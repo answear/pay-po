@@ -41,7 +41,7 @@ class ApiErrorTest extends TestCase
         } catch (ApiErrorException $exception) {
             self::assertSame(400, $exception->statusCode);
             self::assertSame(400, $exception->getCode());
-            self::assertSame(400, $exception->error->code);
+            self::assertSame('400', $exception->error->code);
             self::assertSame('Bad request', $exception->error->message);
             self::assertCount(1, $exception->error->errors);
             self::assertSame('order.referenceId', $exception->error->errors[0]->path);

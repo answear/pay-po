@@ -50,14 +50,19 @@ $orderService->refund('transaction-uuid', 123, $refundUuid);
 ```
 
 Refunds registered on a transaction are returned by `getStatusDetails()` as `Refund[]`, but only
-when PayPo enabled the extended status response for given merchant - otherwise the list is always
-empty. Refunds created outside of your system, eg. in the PayPo panel, have no `referenceRefundId`.
+when PayPo enabled the extended status response for given merchant. Without it `refunds` is `null`,
+which is not the same as an empty list - do not treat a missing refund as a failed one in that case.
+Refunds created outside of your system, eg. in the PayPo panel, have no `referenceRefundId`.
+A refund entry without `amount` or `created` makes `getStatusDetails()` throw `BadResponseException`.
 
 ```php
 $status = $orderService->getStatusDetails('transaction-uuid');
 
-$status->refunds;
-$status->findRefund($refundUuid);
+if (null === $status->refunds) {
+    //extended status response disabled, refunds cannot be verified
+} else {
+    $status->findRefund($refundUuid);
+}
 ```
 
 
@@ -73,7 +78,7 @@ use Answear\PayPo\Response\Notify;
 $notify = Notify::fromRawNotify($requestPayload);
 
 if ($notify->isSettlementNotify()) {
-    $notify->settlementStatus;
+    $notify->settlementStatus; //null for a status not known to this library
     $notify->message;
 }
 ```
