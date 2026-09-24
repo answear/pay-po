@@ -122,6 +122,52 @@ class CreateTest extends AbstractOrder
                 'redirectUrl' => 'https://redirect.url/ro',
             ],
         ];
+
+        $requestWithIds = new CreateRequest(
+            new Order(
+                'ref-id-04',
+                2531,
+                new Address(
+                    'billing street',
+                    'houseNumber',
+                    'apartmentNumber',
+                    'postal',
+                    'city',
+                    'country'
+                ),
+                new Address(
+                    'shipping street',
+                    'houseNumber',
+                    'apartmentNumber',
+                    'postal',
+                    'city',
+                    'country'
+                ),
+                'Description of data',
+            ),
+            new Customer(
+                'name',
+                'surname',
+                'email',
+                'phone'
+            ),
+            new Configuration(
+                'returnUrl',
+                'notifyUrl',
+                null
+            )
+        );
+        $requestWithIds->setId('5c1b82ab-6c9a-4b4e-a892-ce3a7dc1396f');
+        $requestWithIds->setShopId('088fa21e-efab-4ecb-9022-a15cc8344ccd');
+
+        yield 'with transaction id and shop id' => [
+            $requestWithIds,
+            '{"id":"5c1b82ab-6c9a-4b4e-a892-ce3a7dc1396f","merchantId":"e626aba7-598c-4746-9da7-03a9290bddfc","shopId":"088fa21e-efab-4ecb-9022-a15cc8344ccd","order":{"referenceId":"ref-id-04","amount":2531,"billingAddress":{"street":"billing street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"country"},"shippingAddress":{"street":"shipping street","building":"houseNumber","flat":"apartmentNumber","zip":"postal","city":"city","country":"country"},"description":"Description of data"},"customer":{"name":"name","surname":"surname","email":"email","phone":"phone"},"configuration":{"returnUrl":"returnUrl","notifyUrl":"notifyUrl"}}',
+            [
+                'transactionId' => '401',
+                'redirectUrl' => 'https://redirect.url/with-ids',
+            ],
+        ];
     }
 
     protected function sendAndAssert(PayPoClient $client, $request, array $apiResponse): void

@@ -14,6 +14,7 @@ class CreateRequest implements RequestInterface
     private const HTTP_METHOD = 'POST';
     private const ENDPOINT = '/transactions';
 
+    public ?string $id = null;
     public string $merchantId;
     public ?string $shopId = null;
 
@@ -33,6 +34,11 @@ class CreateRequest implements RequestInterface
     public function getUrl(): string
     {
         return self::ENDPOINT;
+    }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 
     public function setShopId(string $shopId): void

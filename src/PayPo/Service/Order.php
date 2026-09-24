@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Answear\PayPo\Service;
 
+use Answear\PayPo\Exception\ApiErrorException;
 use Answear\PayPo\Exception\BadResponseException;
 use Answear\PayPo\Exception\PrepareRequestException;
 use Answear\PayPo\Exception\ServiceUnavailable;
@@ -13,11 +14,13 @@ use Answear\PayPo\Request\Transaction\CreateRequest;
 use Answear\PayPo\Request\Transaction\RefundRequest;
 use Answear\PayPo\Request\Transaction\RequestInterface;
 use Answear\PayPo\Request\Transaction\StatusDetailsRequest;
+use Answear\PayPo\Response\Error\ApiError;
 use Answear\PayPo\Response\Order\ConfirmResponse;
 use Answear\PayPo\Response\Order\CreateResponse;
 use Answear\PayPo\Response\Order\Response;
 use Answear\PayPo\Response\Order\StatusResponse;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 
 class Order
@@ -30,6 +33,7 @@ class Order
     }
 
     /**
+     * @throws ApiErrorException
      * @throws ServiceUnavailable
      * @throws PrepareRequestException
      * @throws BadResponseException
@@ -40,6 +44,7 @@ class Order
     }
 
     /**
+     * @throws ApiErrorException
      * @throws ServiceUnavailable
      * @throws PrepareRequestException
      * @throws BadResponseException
@@ -52,6 +57,7 @@ class Order
     }
 
     /**
+     * @throws ApiErrorException
      * @throws ServiceUnavailable
      * @throws PrepareRequestException
      * @throws BadResponseException
@@ -64,18 +70,20 @@ class Order
     }
 
     /**
+     * @throws ApiErrorException
      * @throws ServiceUnavailable
      * @throws PrepareRequestException
      * @throws BadResponseException
      */
-    public function refund(string $transactionUuid, int $amount): Response
+    public function refund(string $transactionUuid, int $amount, ?string $referenceRefundId = null): Response
     {
-        $request = new RefundRequest($transactionUuid, $amount);
+        $request = new RefundRequest($transactionUuid, $amount, $referenceRefundId);
 
         return $this->handleRequest($request, Response::class);
     }
 
     /**
+     * @throws ApiErrorException
      * @throws ServiceUnavailable
      * @throws PrepareRequestException
      * @throws BadResponseException
@@ -90,6 +98,7 @@ class Order
     /**
      * @return object|mixed
      *
+     * @throws ApiErrorException
      * @throws ServiceUnavailable
      * @throws PrepareRequestException
      * @throws BadResponseException
@@ -123,10 +132,30 @@ class Order
                 $response->getBody()->rewind();
             }
         } catch (GuzzleException $e) {
-            throw new ServiceUnavailable($e->getMessage(), $e->getCode(), $e);
+            throw $this->convertException($e);
         }
 
         return $response;
+    }
+
+    private function convertException(GuzzleException $e): ServiceUnavailable
+    {
+        $response = $e instanceof RequestException ? $e->getResponse() : null;
+
+        if (null === $response || $response->getStatusCode() < 400 || $response->getStatusCode() >= 500) {
+            return new ServiceUnavailable($e->getMessage(), $e->getCode(), $e);
+        }
+
+        if ($response->getBody()->isSeekable()) {
+            $response->getBody()->rewind();
+        }
+
+        return new ApiErrorException(
+            $response->getStatusCode(),
+            ApiError::fromResponseBody($response->getBody()->getContents()),
+            $response,
+            $e
+        );
     }
 
     private function getSerializer(): PayPoSerializer

@@ -12,6 +12,7 @@ class RefundRequest implements RequestInterface
     public function __construct(
         private readonly string $transactionUuid,
         public readonly int $amount,
+        public readonly ?string $referenceRefundId = null,
     ) {
     }
 
